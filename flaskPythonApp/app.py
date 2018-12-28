@@ -1,0 +1,38 @@
+from flask import Flask, Blueprint
+from flask_restful import Api, Resource, url_for
+import log, uuidApi
+LOG = log.setup_custom_logger('root')
+
+import click
+
+# create_app wrapps the other functions to set up the project
+def create_app(config=None, testing=False, cli=True):
+    """
+    Application factory, used to create application
+    """
+    app = Flask(__name__, static_folder=None)
+
+    # configure_app(app, testing)
+    # configure_extensions(app, cli)
+    register_blueprints(app)
+
+    # status check
+    @app.route('/')
+    def checkStatus():
+        return 'App is running!'
+
+    @app.cli.command()
+    def print():
+        """Initialize the database."""
+        LOG.info('print cli')
+        click.echo('Init the db')
+
+    LOG.info('App Started!')
+    # return from create_app
+    return app
+
+def register_blueprints(app):
+    """
+    register all blueprints for application
+    """
+    app.register_blueprint(uuidApi.views.blueprint)
