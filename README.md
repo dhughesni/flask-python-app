@@ -1,3 +1,4 @@
+```
 dhughes@Daryls-MacBook-Pro:~/Developer$ mkdir flask-python-app
 dhughes@Daryls-MacBook-Pro:~/Developer$ cd flask-python-app/
 dhughes@Daryls-MacBook-Pro:~/Developer/flask-python-app$ git init
@@ -16,7 +17,7 @@ dhughes@Daryls-MacBook-Pro:~/Developer/flask-python-app$ source venv/bin/activat
 (venv) dhughes@Daryls-MacBook-Pro:~/Developer/flask-python-app$ pip install flask
 ..
 (venv) dhughes@Daryls-MacBook-Pro:~/Developer/flask-python-app$ pip freeze > requirements.txt
-(venv) dhughes@Daryls-MacBook-Pro:~/Developer/flask-python-app$ export FLASK_APP=run_app.py
+(venv) dhughes@Daryls-MacBook-Pro:~/Developer/flask-python-app$ export FLASK_APP=app.py
 (venv) dhughes@Daryls-MacBook-Pro:~/Developer/flask-python-app$ flask run
 ...
 ...More Dev
@@ -37,7 +38,6 @@ Added blueprints
 (venv) dhughes@Daryls-MacBook-Pro:~/Developer/flask-python-app/flaskPythonApp$ pip install uuid
 ...
 Added logging
-```
 set up via setup_custom_logger in log.py
 - In app.py:
   import log
@@ -45,9 +45,7 @@ set up via setup_custom_logger in log.py
 - In subModules:
   import logging
   LOG = logging.getLogger('root')
-```
 ...
 (venv) dhughes@Daryls-MacBook-Pro:~/Developer/flask-python-app$ pip install pytest-flask
-```
-- https://pytest-flask.readthedocs.io/en/latest/index.html
+https://pytest-flask.readthedocs.io/en/latest/index.html
 ```

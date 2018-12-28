@@ -3,8 +3,6 @@ from flask_restful import Api, Resource, url_for
 import log, uuidApi
 LOG = log.setup_custom_logger('root')
 
-import click
-
 # create_app wrapps the other functions to set up the project
 def create_app(config=None, testing=False, cli=True):
     """
@@ -20,12 +18,6 @@ def create_app(config=None, testing=False, cli=True):
     @app.route('/')
     def checkStatus():
         return 'App is running!'
-
-    @app.cli.command()
-    def print():
-        """Initialize the database."""
-        LOG.info('print cli')
-        click.echo('Init the db')
 
     LOG.info('App Started!')
     # return from create_app
