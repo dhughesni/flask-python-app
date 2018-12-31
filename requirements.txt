@@ -4,8 +4,10 @@ attrs==18.2.0
 certifi==2018.11.29
 chardet==3.0.4
 Click==7.0
+coverage==4.5.2
 Flask==1.0.2
 Flask-RESTful==0.3.7
+-e git+https://github.ooa.sttgts.com/dhughes/flask-python-app.git@705361d2fe9c83a4a0d44f9512aa25776cc9f91a#egg=flaskPythonApp
 funcsigs==1.0.2
 idna==2.8
 itsdangerous==1.1.0
