@@ -1,0 +1,36 @@
+.git
+.ipynb_checkpoints/*
+# /tests/*
+Dockerfile
+.DS_Store
+.gitignore
+README.md
+env.*
+
+# To prevent storing dev/temporary container data
+*.csv
+/tmp/*
+
+.Python
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+venv/
+*.egg-info/
+.installed.cfg
+*.egg
+*.pyc
+*.pytest_cache
+*/*.pyc
+*/*/*.pyc
+*/*/*/*.pyc

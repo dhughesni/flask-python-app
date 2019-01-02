@@ -1,7 +1,11 @@
 from flask import Flask, Blueprint
 from flask_restful import Api, Resource, url_for
-import log, uuidApi
+from . import log
+from . import uuidApi
 LOG = log.setup_custom_logger('root')
+
+if __name__ == '__main__':
+    app.run(debug=True, host='0.0.0.0')
 
 # create_app wrapps the other functions to set up the project
 def create_app(config=None, testing=False, cli=True):

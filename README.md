@@ -1,3 +1,6 @@
+TO-DO:
+-
+# Flask App Setup
 ```
 dhughes@Daryls-MacBook-Pro:~/Developer$ mkdir flask-python-app
 dhughes@Daryls-MacBook-Pro:~/Developer$ cd flask-python-app/
@@ -81,5 +84,68 @@ Commands:
 (venv) dhughes@Daryls-MacBook-Pro:~/Developer/flask-python-app$ pip install pytest coverage
 (venv) dhughes@Daryls-MacBook-Pro:~/Developer/flask-python-app$ coverage run -m pytest # run coverage
 (venv) dhughes@Daryls-MacBook-Pro:~/Developer/flask-python-app$ coverage report # view report
+
+```
+# Docker App setup
+```
+- Check the status
+(venv) dhughes@Daryls-MacBook-Pro:~/Developer/flask-python-app$ minikube status
+There is a newer version of minikube available (v0.32.0).  Download it here:
+https://github.com/kubernetes/minikube/releases/tag/v0.32.0
+
+To disable this notification, run the following:
+minikube config set WantUpdateNotification false
+minikube: Stopped
+cluster:
+kubectl:
+E1231 11:13:42.168028    1486 env.go:330] Error setting machine env variable(s): Error getting ip from host: Host is not running
+(venv) dhughes@Daryls-MacBook-Pro:~/Developer/flask-python-app$ minikube start --memory 8192 --cpus 6
+Starting local Kubernetes v1.10.0 cluster...
+Starting VM...
+Getting VM IP address...
+Moving files into cluster...
+Setting up certs...
+Connecting to cluster...
+Setting up kubeconfig...
+Starting cluster components...
+E1231 11:26:06.851720    1507 start.go:305] Error restarting cluster:  restarting kube-proxy: waiting for kube-proxy to be up for configmap update: timed out waiting for the condition
+(venv) dhughes@Daryls-MacBook-Pro:~/Developer/flask-python-app$
+(venv) dhughes@Daryls-MacBook-Pro:~/Developer/flask-python-app$ eval $(minikube docker-env)
+(venv) dhughes@Daryls-MacBook-Pro:~/Developer/flask-python-app$ minikube status
+minikube: Running
+cluster: Running
+kubectl: Correctly Configured: pointing to minikube-vm at 192.168.99.100
+... Make docker file
+(venv) dhughes@Daryls-MacBook-Pro:~/Developer/flask-python-app$ touch Dockerfile
+.. added .dockerignore
+..Make docker image
+(venv) dhughes@Daryls-MacBook-Pro:~/Developer/flask-python-app$ docker build -t flask-python-app:v0.0.1 . # or docker build -t flask-python-app . <-- to tag as latest
+Sending build context to Docker daemon  26.48MB
+Step 1/5 : FROM python:3
+ ---> db1c801f1c06
+Step 2/5 : COPY . .
+ ---> Using cache
+ ---> 328e268bbda9
+Step 3/5 : RUN pip install -e .
+ ---> Using cache
+ ---> f9ab1e690d66
+Step 4/5 : EXPOSE 5000
+ ---> Using cache
+ ---> 48ddf2d3be2c
+Step 5/5 : CMD [ "CMD", "flaskPythonApp run" ]
+ ---> Using cache
+ ---> e0ce1bff3141
+Successfully built e0ce1bff3141
+Successfully tagged flask-python-app:v0.0.1
+(venv) dhughes@Daryls-MacBook-Pro:~/Developer/flask-python-app$ docker images
+REPOSITORY                                 TAG                 IMAGE ID            CREATED             SIZE
+flask-python-app                           v0.0.1              e0ce1bff3141        33 seconds ago      957MB
+
+... Lets try run the docker image before deploying into helm using: docker run image_name:tag_name
+(venv) dhughes@Daryls-MacBook-Pro:~/Developer/flask-python-app$ docker run -it flask-python-app
+
+.. To enter docker image as bash
+dhughes@Daryls-MacBook-Pro:~/Developer/flask-python-app$ docker run -it flask-python-app /bin/bash
+
 
 ```
