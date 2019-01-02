@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ template "helm.fullname" . }}-service-test"
+  annotations:
+    "helm.sh/hook": test-success
+spec:
+  containers:
+    - name: curl
+      image: radial/busyboxplus:curl
+      command: ['curl']
+       # this needs to be updates to be config driven
+      args: ['http://192.168.99.100:31824']
+  restartPolicy: Never

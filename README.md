@@ -257,4 +257,9 @@ flask-python-app  1        0        0           0          1s
 NAME                               READY  STATUS   RESTARTS  AGE
 flask-python-app-699755cdf5-jdr4n  0/1    Pending  0         0s
 ```
-then helm test
+# Basic Helm test
+```
+dhughes@Daryls-MacBook-Pro:~/Developer/flask-python-app$ helm test goodly-toad
+No Tests Found
+
+```
