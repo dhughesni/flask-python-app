@@ -1,6 +1,7 @@
-TO-DO:
--
+
 # Flask App Setup
+
+- set up project
 ```
 dhughes@Daryls-MacBook-Pro:~/Developer$ mkdir flask-python-app
 dhughes@Daryls-MacBook-Pro:~/Developer$ cd flask-python-app/
@@ -146,6 +147,114 @@ flask-python-app                           v0.0.1              e0ce1bff3141     
 
 .. To enter docker image as bash
 dhughes@Daryls-MacBook-Pro:~/Developer/flask-python-app$ docker run -it flask-python-app /bin/bash
+.. To expose the running port
+dhughes@Daryls-MacBook-Pro:~/Developer/flask-python-app$ docker run -p 5000:5000 -it flask-python-app /bin/bash
 
+.. app is running on minikube
+dhughes@Daryls-MacBook-Pro:~$ echo $(minikube ip)
+192.168.99.100
 
 ```
+
+# Run in minikube via kubectl
+```
+dhughes@Daryls-MacBook-Pro:~/Developer/flask-python-app$ minikube delete
+Deleting local Kubernetes cluster...
+Machine deleted.
+dhughes@Daryls-MacBook-Pro:~/Developer/flask-python-app$ minikube status
+minikube:
+cluster:
+kubectl:
+dhughes@Daryls-MacBook-Pro:~/Developer/flask-python-app$ minikube start --memory 8192 --cpus 6
+Starting local Kubernetes v1.10.0 cluster...
+Starting VM...
+...
+dhughes@Daryls-MacBook-Pro:~/Developer/flask-python-app$ minikube dashboard
+Opening kubernetes dashboard in default browser...
+...
+dhughes@Daryls-MacBook-Pro:~/Developer/flask-python-app$ eval $(minikube docker-env)
+dhughes@Daryls-MacBook-Pro:~/Developer/flask-python-app$ docker images
+...Check if flask app is built?
+...build it
+dhughes@Daryls-MacBook-Pro:~/Developer/flask-python-app$ docker build -t flask-python-app .
+...
+dhughes@Daryls-MacBook-Pro:~/Developer/flask-python-app$ docker images
+REPOSITORY                                 TAG                 IMAGE ID            CREATED             SIZE
+flask-python-app                           latest              734f026dd452        3 seconds ago       927MB
+...
+...Create deployment
+dhughes@Daryls-MacBook-Pro:~/Developer/flask-python-app$ kubectl run flask-python-app --image=flask-python-app:latest --port=5000 --image-pull-policy=Never
+deployment.apps/flask-python-app created
+...
+dhughes@Daryls-MacBook-Pro:~/Developer/flask-python-app$ kubectl expose deployment flask-python-app --type=LoadBalancer
+service/flask-python-app exposed
+...
+dhughes@Daryls-MacBook-Pro:~/Developer/flask-python-app$ kubectl get services
+NAME               TYPE           CLUSTER-IP    EXTERNAL-IP   PORT(S)          AGE
+flask-python-app   LoadBalancer   10.97.51.79   <pending>     5000:32352/TCP   29s
+kubernetes         ClusterIP      10.96.0.1     <none>        443/TCP          10m
+dhughes@Daryls-MacBook-Pro:~/Developer/flask-python-app$ minikube -n default service list
+|-----------|------------------|-----------------------------|
+| NAMESPACE |       NAME       |             URL             |
+|-----------|------------------|-----------------------------|
+| default   | flask-python-app | http://192.168.99.100:32352 |
+| default   | kubernetes       | No node port                |
+|-----------|------------------|-----------------------------|
+
+```
+# Use Helm to deploy as Chart
+```
+- https://docs.helm.sh/using_helm/#quickstart
+dhughes@Daryls-MacBook-Pro:~/Developer/flask-python-app$ kubectl config current-context
+minikube
+dhughes@Daryls-MacBook-Pro:~/Developer/flask-python-app$ helm init
+$HELM_HOME has been configured at /Users/dhughes/.helm.
+
+Tiller (the Helm server-side component) has been installed into your Kubernetes Cluster.
+
+Please note: by default, Tiller is deployed with an insecure 'allow unauthenticated users' policy.
+To prevent this, run `helm init` with the --tiller-tls-verify flag.
+For more information on securing your installation see: https://docs.helm.sh/using_helm/#securing-your-helm-installation
+Happy Helming!
+..
+- Create the basic chart directory
+dhughes@Daryls-MacBook-Pro:~/Developer/flask-python-app$ helm create helmChart
+Creating helmChart
+..
+..clean up Minikube
+dhughes@Daryls-MacBook-Pro:~/Developer/flask-python-app$ kubectl get services
+dhughes@Daryls-MacBook-Pro:~/Developer/flask-python-app$ kubectl delete services ...
+dhughes@Daryls-MacBook-Pro:~/Developer/flask-python-app$ kubectl get deployments
+dhughes@Daryls-MacBook-Pro:~/Developer/flask-python-app$ kubectl delete deployments ...
+
+... set up simple chart: https://tech.paulcz.net/blog/getting-started-with-helm/
+dhughes@Daryls-MacBook-Pro:~/Developer/flask-python-app$ kubectl run flask-python-app --image=flask-python-app:latest --port=5000 --image-pull-policy=Never -o yaml > manifests/deployment.yaml
+dhughes@Daryls-MacBook-Pro:~/Developer/flask-python-app$ kubectl expose deployment flask-python-app --type=LoadBalancer -o yaml > manifests/service.yaml
+dhughes@Daryls-MacBook-Pro:~/Developer/flask-python-app$ kubectl delete -f manifests
+deployment.apps "flask-python-app" deleted
+service "flask-python-app" deleted
+dhughes@Daryls-MacBook-Pro:~/Developer/flask-python-app$ helm create helm
+Creating helm  
+dhughes@Daryls-MacBook-Pro:~/Developer/flask-python-app$ cp manifests/* helm/templates/
+dhughes@Daryls-MacBook-Pro:~/Developer/flask-python-app$ rm helm/templates/ingress.yaml
+dhughes@Daryls-MacBook-Pro:~/Developer/flask-python-app$ rm helm/templates/NOTES.txt
+dhughes@Daryls-MacBook-Pro:~/Developer/flask-python-app$ helm install helm
+NAME:   my-first-helm-chart
+LAST DEPLOYED: Wed Jan  2 14:02:07 2019
+NAMESPACE: default
+STATUS: DEPLOYED
+
+RESOURCES:
+==> v1/Service
+NAME              TYPE          CLUSTER-IP      EXTERNAL-IP  PORT(S)         AGE
+flask-python-app  LoadBalancer  10.104.222.102  <pending>    5000:31824/TCP  1s
+
+==> v1beta1/Deployment
+NAME              DESIRED  CURRENT  UP-TO-DATE  AVAILABLE  AGE
+flask-python-app  1        0        0           0          1s
+
+==> v1/Pod(related)
+NAME                               READY  STATUS   RESTARTS  AGE
+flask-python-app-699755cdf5-jdr4n  0/1    Pending  0         0s
+```
+then helm test

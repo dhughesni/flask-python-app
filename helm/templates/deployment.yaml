@@ -1,0 +1,46 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  creationTimestamp: 2019-01-02T13:59:07Z
+  generation: 1
+  labels:
+    run: flask-python-app
+  name: flask-python-app
+  namespace: default
+  resourceVersion: "3857"
+  selfLink: /apis/apps/v1beta1/namespaces/default/deployments/flask-python-app
+  uid: 92937267-0e96-11e9-86b1-080027785a78
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 2
+  selector:
+    matchLabels:
+      run: flask-python-app
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        run: flask-python-app
+    spec:
+      containers:
+      - image: flask-python-app:latest
+        imagePullPolicy: Never
+        name: flask-python-app
+        ports:
+        - containerPort: 5000
+          protocol: TCP
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+status: {}

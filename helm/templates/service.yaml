@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: 2019-01-02T13:59:13Z
+  labels:
+    run: flask-python-app
+  name: flask-python-app
+  namespace: default
+  resourceVersion: "3887"
+  selfLink: /api/v1/namespaces/default/services/flask-python-app
+  uid: 9605219c-0e96-11e9-86b1-080027785a78
+spec:
+  clusterIP: 10.104.222.102
+  externalTrafficPolicy: Cluster
+  ports:
+  - nodePort: 31824
+    port: 5000
+    protocol: TCP
+    targetPort: 5000
+  selector:
+    run: flask-python-app
+  sessionAffinity: None
+  type: LoadBalancer
+status:
+  loadBalancer: {}
