@@ -10,17 +10,22 @@ dhughes@Daryls-MacBook-Pro:~/Developer/flask-python-app$ source venv/bin/activat
 dhughes@Daryls-MacBook-Pro:~/Developer/flask-python-app$ pip install -r requirements.txt
 - install flaskPythonApp module
 dhughes@Daryls-MacBook-Pro:~/Developer/flask-python-app$ pip install .
-- run the app
-(venv) dhughes@Daryls-MacBook-Pro:~/Developer/flask-python-app$ flaskPythonApp run
- * Environment: production
-   WARNING: Do not use the development server in a production environment.
-   Use a production WSGI server instead.
- * Debug mode: off
- * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
- ...
+- run the app in development mode
+(venv) dhughes@Daryls-MacBook-Pro:~/Developer/flask-python-app$ export FLASK_ENV=development
+(venv) dhughes@Daryls-MacBook-Pro:~/Developer/flask-python-app$ flaskPythonApp run --host=0.0.0.0 --port=5000
+ * Environment: development
+ * Debug mode: on
+ * Running on http://0.0.0.0:5000/ (Press CTRL+C to quit)
+ * Restarting with stat
+updating config
+ * Debugger is active!
+updating config
+ * Debugger PIN: 129-130-407
+...
 ```
 
 # Build Steps
+
 ```
 - Build Docker image
 dhughes@Daryls-MacBook-Pro:~/Developer/flask-python-app$ docker build -t flask-python-app .
@@ -323,4 +328,28 @@ dhughes@Daryls-MacBook-Pro:~/Developer/flask-python-app$ helm test test-helm-cha
 
 RUNNING: test-helm-chart-service-test
 PASSED: test-helm-chart-service-test
+```
+
+# Pytest - Enable unit tests to run against localhost and also external host:port
+
+```
+- run tests against local client
+(venv) dhughes@Daryls-MacBook-Pro:~/Developer/flask-python-app$ pytest
+
+---
+
+- set app running on terminal
+(venv) dhughes@Daryls-MacBook-Pro:~/Developer/flask-python-app$ flaskPythonApp run --host=0.0.0.0 --port=5000
+- run tests against remote
+(venv) dhughes@Daryls-MacBook-Pro:~/Developer/flask-python-app$ pytest --unitRemote http://0.0.0.0:5000
+============================================================================================================ test session starts =============================================================================================================
+platform darwin -- Python 2.7.15, pytest-4.0.2, py-1.7.0, pluggy-0.8.0
+rootdir: /Users/dhughes/Developer/flask-python-app, inifile:
+plugins: flask-0.14.0
+collected 4 items
+
+tests/test_app.py ..                                                                                                                                                                                                                   [ 50%]
+tests/test_uuidApi.py ..                                                                                                                                                                                                               [100%]
+
+========================================================================================================== 4 passed in 5.14 seconds ==========================================================================================================
 ```
